@@ -3,6 +3,7 @@
 import 'dart:js' as js;
 import 'package:flutter_facebook_auth_platform_interface/flutter_facebook_auth_platform_interface.dart';
 import 'package:flutter_facebook_auth_web/flutter_facebook_auth_web.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'mock/mock_data.dart';
 import 'mock/mock_interop.dart';
@@ -11,12 +12,35 @@ import 'mock/mock_interop.dart';
 FlutterFacebookAuthPlugin getPlugin() => FlutterFacebookAuthPlugin();
 
 void main() {
+  group('init', () {
+    test('not initialized', () async {
+      final plugin = getPlugin();
+      final initialized = plugin.isWebSdkInitialized;
+      expect(initialized, false);
+      final result = await plugin.login();
+      expect(result.status == LoginStatus.failed, true);
+    });
+
+    test('is initialized', () {
+      fbMock = FbMock();
+      js.context['FB']['init'] = js.allowInterop((js.JsObject options) {});
+      final plugin = getPlugin();
+      plugin.webInitialize(
+        appId: '1234',
+        cookie: true,
+        xfbml: true,
+        version: 'v10',
+      );
+      final initialized = plugin.isWebSdkInitialized;
+      expect(initialized, true);
+    });
+  });
   group('web authentication', () {
     late bool isLogged = false;
     setUp(
       () {
         fbMock = FbMock();
-
+        js.context['FB']['init'] = js.allowInterop((js.JsObject options) {});
         js.context['FB']['login'] = js.allowInterop((js.JsFunction fn, _) {
           isLogged = true;
           fn.apply(
@@ -78,6 +102,12 @@ void main() {
     );
     test('login request', () async {
       final plugin = getPlugin();
+      plugin.webInitialize(
+        appId: '1234',
+        cookie: true,
+        xfbml: true,
+        version: 'v10',
+      );
       // check that the user is not logged
       expect(await plugin.accessToken, null);
 

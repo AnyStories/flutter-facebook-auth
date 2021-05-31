@@ -1,16 +1,23 @@
 // ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth_platform_interface/flutter_facebook_auth_platform_interface.dart';
 export 'package:flutter_facebook_auth_platform_interface/flutter_facebook_auth_platform_interface.dart';
 
-/// Generic class that extends of FacebookAuthPlatform interface
+/// this class implements the FacebookAuthPlatform interface
+/// and calls to the native APIs on Android, iOS and web.
 class FacebookAuth implements FacebookAuthPlatform {
-  FacebookAuth._internal(); // private constructor for singletons
-  static FacebookAuth _instance = FacebookAuth._internal();
-
+  FacebookAuth._(); // private constructor for singletons
   /// return the same instance of FacebookAuth
-  static FacebookAuth get instance => _instance;
+  static FacebookAuth instance = FacebookAuth._();
+
+  /// you can use FacebookAuth.instance or FacebookAuth.i
+  static FacebookAuth get i => instance;
 
   FacebookAuthPlatform _ = FacebookAuthPlatform.instance;
+
+  /// return a new instance of FacebookAuth for testing
+  @visibleForTesting
+  static FacebookAuth getInstance() => FacebookAuth._();
 
   /// if the user is logged return one instance of AccessToken
   @override
@@ -66,7 +73,7 @@ class FacebookAuth implements FacebookAuthPlatform {
   @override
   Future<LoginResult> login({
     List<String> permissions = const ['email', 'public_profile'],
-    String loginBehavior = LoginBehavior.NATIVE_ONLY,
+    LoginBehavior loginBehavior = LoginBehavior.nativeOnly,
   }) =>
       _.login(permissions: permissions, loginBehavior: loginBehavior);
 
@@ -91,4 +98,9 @@ class FacebookAuth implements FacebookAuthPlatform {
   /// It could be null if you exceed the request limit
   @override
   Future<FacebookPermissions?> get permissions => _.permissions;
+
+  /// use this to know if the facebook sdk was initializated on Web
+  /// on Android and iOS is always true
+  @override
+  bool get isWebSdkInitialized => _.isWebSdkInitialized;
 }

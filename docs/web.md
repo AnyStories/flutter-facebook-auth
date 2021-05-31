@@ -69,7 +69,7 @@ void main() {
   // check if is running on Web
   if (kIsWeb) {
     // initialiaze the facebook javascript SDK
-    FacebookAuth.instance.webInitialize(
+    FacebookAuth.i.webInitialize(
       appId: "1329834907365798",//<-- YOUR APP_ID
       cookie: true,
       xfbml: true,
@@ -79,3 +79,6 @@ void main() {
   runApp(MyApp());
 }
 ```
+
+
+!> On Web if the facebook SDK was not initialized by missing configuration or  content blockers all methods of this plugin will return null or a fail status depending of the method. You can check if the SDK was initialized using ` FacebookAuth.i.isWebSdkInitialized`.

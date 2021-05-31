@@ -1,3 +1,10 @@
+### 2.6.0
+- Removed LoginBehavior and FacebookAuthErrorCode class.
+- Added enum LoginBehavior.
+- Improved tests.
+### 2.5.0
+- Added isWebSdkInitialized;
+
 ### 2.4.2
 - Removed empty list on declinedPermissions and grantedPermissions.
 

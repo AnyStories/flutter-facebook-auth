@@ -12,9 +12,10 @@ class AccessToken {
   /// token provided by facebook to make api calls to the GRAPH API
   final String token;
 
-  // the facebook application Id
+  /// the facebook application Id
   final String applicationId;
 
+  /// the graph Domain name returned by facebook
   final String? graphDomain;
 
   /// list of string with the rejected permission by the user (on Web is null)
@@ -23,10 +24,9 @@ class AccessToken {
   /// list of string with the approved permission by the user (on Web is null)
   final List<String>? grantedPermissions;
 
-  // is `true` when the token is expired
+  /// is `true` when the token is expired
   final bool isExpired;
 
-  /// constrcutor
   AccessToken({
     required this.declinedPermissions,
     required this.grantedPermissions,
