@@ -73,7 +73,7 @@ class FacebookAuth implements FacebookAuthPlatform {
   @override
   Future<LoginResult> login({
     List<String> permissions = const ['email', 'public_profile'],
-    LoginBehavior loginBehavior = LoginBehavior.nativeOnly,
+    LoginBehavior loginBehavior = LoginBehavior.nativeWithFallback,
   }) =>
       _.login(permissions: permissions, loginBehavior: loginBehavior);
 
